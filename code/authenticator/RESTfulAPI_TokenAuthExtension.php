@@ -15,24 +15,24 @@
 class RESTfulAPI_TokenAuthExtension extends DataExtension
 {
 	private static $db = array(
-    'ApiToken'       => 'Varchar(160)',
-    'RefreshToken'   => 'Varchar(160)',
-    'ApiTokenExpire' => 'Int'
+    'ApiToken'        => 'Varchar(160)',
+    'ApiRefreshToken' => 'Varchar(161)',
+    'ApiTokenExpire'  => 'Int'
 	);
 
-  // Add a unique index to the API token.
-  // Should increase lookup performance and prevent duplicate tokens.
+  // Add a index to the API token and refresh token.
+  // Should increase lookup performance.
+  // Cannot use unique constraint because MSSQL doesn't allow multiple null values:
+  // https://github.com/silverstripe/silverstripe-mssql/issues/24
   private static $indexes = array(
-    'ApiToken' => array(
-      'type' => 'unique',
-      'value' => '"ApiToken"'
-    )
+    'ApiToken' => true,
+    'ApiRefreshToken' => true
   );
 
 	function updateCMSFields(FieldList $fields)
 	{
 	  $fields->removeByName('ApiToken');
-	  $fields->removeByName('RefreshToken');
+	  $fields->removeByName('ApiRefreshToken');
 	  $fields->removeByName('ApiTokenExpire');
 	}
 }
