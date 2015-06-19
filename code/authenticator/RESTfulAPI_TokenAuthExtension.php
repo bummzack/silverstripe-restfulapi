@@ -24,6 +24,7 @@ class RESTfulAPI_TokenAuthExtension extends DataExtension
   // Should increase lookup performance.
   // Cannot use unique constraint because MSSQL doesn't allow multiple null values:
   // https://github.com/silverstripe/silverstripe-mssql/issues/24
+  // TODO: Move to unique indexes, when it's properly supported by all Database bindings for SilverStripe
   private static $indexes = array(
     'ApiToken' => true,
     'ApiRefreshToken' => true
