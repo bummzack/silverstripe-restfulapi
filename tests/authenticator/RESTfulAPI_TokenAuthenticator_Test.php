@@ -13,7 +13,7 @@
 class RESTfulAPI_TokenAuthenticator_Test extends RESTfulAPI_Tester
 {
   protected $requiredExtensions = array(
-    'Member' => array('RESTfulAPI_TokenAuthExtension')
+    'Member' => array('RESTfulAPI_TokenAuthExtension', 'RESTfulAPI_CanLoginExtension_Test')
   );
 
   protected function getAuthenticator()
@@ -29,7 +29,7 @@ class RESTfulAPI_TokenAuthenticator_Test extends RESTfulAPI_Tester
   protected function getFlawedAuthenticator()
   {
     $injector = new Injector();
-    $auth     = new FlawedAuthenticator();
+    $auth     = new RESTfulAPI_FlawedAuthenticator_Test();
 
     $injector->inject($auth);
 
@@ -308,6 +308,69 @@ class RESTfulAPI_TokenAuthenticator_Test extends RESTfulAPI_Tester
     );
   }
 
+  public function testCanLogin()
+  {
+    $auth = $this->getAuthenticator();
+
+    // check login when canLogIn check fails
+    $request = new SS_HTTPRequest(
+      'GET',
+      'api/auth/login',
+      array(
+        'email' => 'test@test.com',
+        'pwd'   => 'test'
+      )
+    );
+
+    RESTfulAPI_CanLoginExtension_Test::$deny = true;
+
+    $result = $auth->login($request);
+
+    RESTfulAPI_CanLoginExtension_Test::$deny = false;
+
+    $this->assertEquals(
+      $result['code'],
+      RESTfulAPI_TokenAuthenticator::AUTH_CODE_LOGIN_FAIL,
+      "Logging in a member whose `canLogIn` check fails should not be allowed."
+    );
+
+    // check authenticate when canLogIn check fails. Must login first
+    $request = new SS_HTTPRequest(
+      'GET',
+      'api/auth/login',
+      array(
+        'email' => 'test@test.com',
+        'pwd'   => 'test'
+      )
+    );
+
+    $result = $auth->login($request);
+
+    $this->assertEquals(
+      $result['code'],
+      RESTfulAPI_TokenAuthenticator::AUTH_CODE_LOGGED_IN,
+      "Logging in a member whose `canLogIn` check doesn't fail should be allowed."
+    );
+
+    $request = new SS_HTTPRequest(
+      'GET',
+      'api/ApiTest_Book/1'
+    );
+    $request->addHeader('X-Silverstripe-Apitoken', $result['token']);
+
+    // deny all users for the authenticate request
+    RESTfulAPI_CanLoginExtension_Test::$deny = true;
+
+    $result = $auth->authenticate($request);
+
+    RESTfulAPI_CanLoginExtension_Test::$deny = false;
+
+    $this->assertContainsOnlyInstancesOf(
+      'RESTfulAPI_Error',
+      array($result),
+      "TokenAuth authentication should fail when 'canLogIn' fails"
+    );
+  }
 
   public function test()
   {
@@ -317,10 +380,26 @@ class RESTfulAPI_TokenAuthenticator_Test extends RESTfulAPI_Tester
 /**
  * Flawed authenticator to test the case when non-unique tokens are generated
  */
-class FlawedAuthenticator extends RESTfulAPI_TokenAuthenticator
+class RESTfulAPI_FlawedAuthenticator_Test extends RESTfulAPI_TokenAuthenticator
 {
   protected function generateToken()
   {
     return 'I always return the same token!';
+  }
+}
+  
+
+/**
+ * Extension to test "canLogin"
+ */
+class RESTfulAPI_CanLoginExtension_Test extends DataExtension
+{
+  public static $deny = false;
+
+  public function canLogIn(ValidationResult &$result)
+  {
+    if(self::$deny){
+      $result->error('All access denied');
+    }
   }
 }
