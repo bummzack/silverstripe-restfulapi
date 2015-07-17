@@ -9,10 +9,10 @@ This module implements a RESTful API for read/write access to your SilverStripe 
 This fork aims to keep in sync with the development of the [original module](https://github.com/colymba/silverstripe-restfulapi) while
 providing some fixes improvements for unclosed issues:
 
- - (**#52**)[https://github.com/colymba/silverstripe-restfulapi/issues/52] TokenAuthenticator should check `canLogIn` before actually logging in a user 
- - (**#50**)[https://github.com/colymba/silverstripe-restfulapi/issues/50] Empty has_many or many_many relations don't show up in serialized output. 
- - (**#44**)[https://github.com/colymba/silverstripe-restfulapi/issues/44] Add an API method to allow refreshing of the access-token 
- - (**#39**)[https://github.com/colymba/silverstripe-restfulapi/issues/39] API Token not guaranteed to be unique.
+ - [**#52**](https://github.com/colymba/silverstripe-restfulapi/issues/52) TokenAuthenticator should check `canLogIn` before actually logging in a user 
+ - [**#50**](https://github.com/colymba/silverstripe-restfulapi/issues/50) Empty has_many or many_many relations don't show up in serialized output. 
+ - [**#44**](https://github.com/colymba/silverstripe-restfulapi/issues/44) Add an API method to allow refreshing of the access-token 
+ - [**#39**](https://github.com/colymba/silverstripe-restfulapi/issues/39) API Token not guaranteed to be unique.
  
 
 ## API URL structure
