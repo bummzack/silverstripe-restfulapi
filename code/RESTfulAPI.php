@@ -268,13 +268,13 @@ class RESTfulAPI extends Controller
         else{          
           //let's be shady here instead
           return $this->error( new RESTfulAPI_Error(403,
-            "Action '$action' not allowed."
+            "Action not allowed."
           ));
         }
       }
       else{
         return $this->error( new RESTfulAPI_Error(403,
-          "Action '$action' not allowed."
+          "Action not allowed."
         ));
       }
       
@@ -313,13 +313,13 @@ class RESTfulAPI extends Controller
         else{          
           //let's be shady here instead
           return $this->error( new RESTfulAPI_Error(403,
-            "Action '$action' not allowed."
+            "Action not allowed."
           ));
         }
       }
       else{
         return $this->error( new RESTfulAPI_Error(403,
-          "Action '$action' not allowed."
+          "Action not allowed."
         ));
       }
     }

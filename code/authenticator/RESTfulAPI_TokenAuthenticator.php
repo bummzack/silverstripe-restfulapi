@@ -255,7 +255,7 @@ class RESTfulAPI_TokenAuthenticator implements RESTfulAPI_Authenticator
    */
   public function getToken($id)
   {
-    if ( $id )
+    if ( $id && is_numeric($id) )
     {
       $ownerClass = $this->tokenConfig['owner'];
       $owner      = DataObject::get_by_id($ownerClass, $id);
@@ -284,7 +284,7 @@ class RESTfulAPI_TokenAuthenticator implements RESTfulAPI_Authenticator
    */
   public function resetToken($id, $expired = false)
   {
-    if ( $id )
+    if ( $id && is_numeric($id) )
     {
       $ownerClass = $this->tokenConfig['owner'];
       $owner      = DataObject::get_by_id($ownerClass, $id);

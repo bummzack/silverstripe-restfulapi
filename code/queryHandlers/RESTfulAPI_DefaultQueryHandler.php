@@ -109,7 +109,7 @@ class RESTfulAPI_DefaultQueryHandler implements RESTfulAPI_QueryHandler
       if ( !class_exists($model) )
       {
         return new RESTfulAPI_Error(400,
-          "Model does not exist. Received '$model'."
+          "Model does not exist."
         );
       }
       else{
@@ -136,13 +136,13 @@ class RESTfulAPI_DefaultQueryHandler implements RESTfulAPI_QueryHandler
     if ( ($request->isPUT() || $request->isDELETE()) && !is_numeric($id) )
     {
       return new RESTfulAPI_Error(400,
-        "Invalid or missing ID. Received '$id'."
+        "Invalid or missing ID."
       );
     }
     else if ( $id !== NULL && !is_numeric($id) )
     {
       return new RESTfulAPI_Error(400,
-        "Invalid ID. Received '$id'."
+        "Invalid ID."
       );
     }
     else{
@@ -250,7 +250,7 @@ class RESTfulAPI_DefaultQueryHandler implements RESTfulAPI_QueryHandler
       if ( !$return )
       {
         return new RESTfulAPI_Error(404,
-          "Model $id of $model not found."
+          "Model not found."
         );
       }
       else if ( !RESTfulAPI::api_access_control($return, $request->httpMethod()) )
@@ -543,7 +543,7 @@ class RESTfulAPI_DefaultQueryHandler implements RESTfulAPI_QueryHandler
     else{
       //shouldn't happen but just in case
       return new RESTfulAPI_Error(400,
-        "Invalid or missing ID. Received '$id'."
+        "Invalid or missing ID."
       );
     }
     
